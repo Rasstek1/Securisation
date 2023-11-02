@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-// Routes accessibles à tous les utilisateurs
 Route::get('/login', function () { return view('login'); })->name('login');
 Route::get('/register', function () { return view('register'); })->name('register');
 Route::post('/login', [SessionController::class, 'login'])->name('login2');
@@ -24,12 +22,14 @@ Route::post('/register', [SessionController::class, 'register'])->name('register
 Route::post('/recherche', [CrayonController::class, 'search']);
 Auth::routes();
 
+// Routes accessible a tout le mond
+Route::get('/', [CrayonController::class, 'index'])->name('index');
+Route::get('/crayons', [CrayonController::class, 'index'])->name('crayons.index');
+Route::get('/crayons/create', [CrayonController::class, 'create'])->name('crayons.create');
+Route::post('/crayons', [CrayonController::class, 'store'])->name('crayons.store');
+
 // Routes protégées par authentification
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [CrayonController::class, 'index'])->name('index');
-    Route::get('/crayons', [CrayonController::class, 'index'])->name('crayons.index');
-    Route::get('/crayons/create', [CrayonController::class, 'create'])->name('crayons.create');
-    Route::post('/crayons', [CrayonController::class, 'store'])->name('crayons.store');
     Route::get('/crayons/{id}/edit', [CrayonController::class, 'edit'])->name('crayons.edit');
     Route::put('/crayons/{id}', [CrayonController::class, 'update'])->name('crayons.update');
     Route::delete('/crayons/{id}', [CrayonController::class, 'destroy'])->name('crayons.destroy');

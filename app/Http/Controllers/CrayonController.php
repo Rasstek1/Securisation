@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Crayon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class CrayonController extends Controller
 {
@@ -40,11 +41,7 @@ class CrayonController extends Controller
     // Afficher le formulaire de modification de crayon
     public function edit($id)
     {
-        try {
-            session_start();
-        }
-        catch (\Exception){}
-        if($_SESSION['login'] == 'true'){
+        if(Auth::check()){
             $crayon = Crayon::findOrFail($id);
             return view('crayons.edit', compact('crayon'));
         }
@@ -73,11 +70,7 @@ class CrayonController extends Controller
     // Supprimer un crayon de la base de données
     public function destroy($id)
     {
-        try {
-            session_start();
-        }
-        catch (\Exception){}
-        if($_SESSION['login'] == 'true'){
+        if(Auth::check()){
             $crayon = Crayon::findOrFail($id);
             $crayon->delete();
 
@@ -89,9 +82,12 @@ class CrayonController extends Controller
     }
 
     public function search(Request $request){
+        // Utiliser le binding de paramètres pour prévenir l'injection SQL
         $crayons = DB::table('crayons')
-            ->where('nom', 'like', DB::raw('"%' . $request->texte . '%"'))
+            ->where('nom', 'like', '%' . $request->input('texte') . '%')
             ->get();
+
         return view('crayons.index', compact('crayons'));
     }
+
 }
