@@ -12,20 +12,23 @@ class SessionController extends Controller
     // Afficher le formulaire de création de crayon
     public function login(Request $request)
     {
-        if(DB::table('users')
-            ->where('email', '=', $request->input('email'))
-            ->where('password', '=', $request->input('password'))
-            ->first() != null){
-            try {
-                session_start();
-            }
-            catch (\Exception){}
-            $_SESSION['login'] = 'true';
-            return redirect('/');
+        // Valider la requête
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        // Utiliser Auth::attempt pour vérifier les identifiants
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            return redirect()->intended('/');
         }
-        else{
-            return view('login');
-        }
+
+        // Renvoyer en arrière avec une erreur si les identifiants sont incorrects
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
 
     // Enregistrer un nouveau crayon dans la base de données

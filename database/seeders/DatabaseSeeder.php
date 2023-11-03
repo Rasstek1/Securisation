@@ -24,17 +24,20 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory()->create([
             'name' => 'Alice',
             'email' => 'alice@email.com',
-            'password' => 'Password1'
+            'password' => '$2b$12$Z6Giv02LdYii4pybukXXK.VcEgjG.mUCiBYNOA9Su0eu8SNINgFIe
+'
         ]);
         \App\Models\User::factory()->create([
             'name' => 'Bob',
             'email' => 'bob@example.com',
-            'password' => 'Superman'
+            'password' => '$2b$12$2pWt0LAr9OmidhY8DmU/beUwdsfUj72apuS8WBYSGB6iFSey49fZe
+'
         ]);
         \App\Models\User::factory()->create([
             'name' => 'Gordon',
             'email' => 'gb@mail.com',
-            'password' => '123456'
+            'password' => '$2b$12$TPHl6k7jPQNCG8SEbKux6u4zlBDY2mvBoeeduFv5IzXDiD.L74bZi
+'
         ]);
     }
 }
